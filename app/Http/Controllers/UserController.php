@@ -73,8 +73,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        return view('user.edit', compact('user'));
+        if ($id != 1) {
+            $user = User::findOrFail($id);
+            return view('user.edit', compact('user'));
+        }
+        else {
+            return redirect()->route('users.index');
+        }
     }
 
     /**
@@ -86,31 +91,41 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
-        ]);
+        if ($id != 1) {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
+            ]);
 
-        $user = User::findOrFail($id);
+            $user = User::findOrFail($id);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
 
-        return redirect()->route('users.index')->with('success', 'Data Added Successfully');
+            return redirect()->route('users.index')->with('success', 'Data Added Successfully');
+        }
+        else {
+            return redirect()->route('users.index');
+        }
     }
 
     public function updatePass(Request $request, $id)
     {
-        $request->validate([
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        if ($id != 1) {
+            $request->validate([
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
 
-        $user = User::findOrFail($id);
-        $user->password = Hash::make($request->password);
-        $user->save();
+            $user = User::findOrFail($id);
+            $user->password = Hash::make($request->password);
+            $user->save();
 
-        return redirect()->route('users.index')->with('success', 'Data Added Successfully');
+            return redirect()->route('users.index')->with('success', 'Data Added Successfully');
+        }
+        else {
+            return redirect()->route('users.index');
+        }
     }
 
     /**
@@ -121,8 +136,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return redirect()->route('users.index')->with('success', 'Data Deleted Successfully');
+        if ($id != 1) {
+            $user = User::findOrFail($id);
+            $user->delete();
+            return redirect()->route('users.index')->with('success', 'Data Deleted Successfully');
+        }
+        else {
+            return redirect()->route('users.index');
+        }
     }
 }

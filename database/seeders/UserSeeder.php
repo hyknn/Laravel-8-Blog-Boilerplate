@@ -20,11 +20,13 @@ class UserSeeder extends Seeder
                 'name' => 'Administrator',
                 'email' => 'admin@hyoth.com',
                 'password' => Hash::make('admin1234'),
+                'email_verified_at' => '2022-05-24 12:57:39',
             ],
             [
                 'name' => 'Anita',
-                'email' => 'admin@hyoth.com',
+                'email' => 'anita@hyoth.com',
                 'password' => Hash::make('admin1234'),
+                'email_verified_at' => '2022-05-24 12:57:39',
             ],
         );
     }

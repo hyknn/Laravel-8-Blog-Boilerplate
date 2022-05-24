@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert(
-            [
+            [[
                 'name' => 'Administrator',
                 'email' => 'admin@hyoth.com',
                 'password' => Hash::make('admin1234'),
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
                 'email' => 'anita@hyoth.com',
                 'password' => Hash::make('admin1234'),
                 'email_verified_at' => '2022-05-24 12:57:39',
-            ],
+            ]]
         );
     }
 }

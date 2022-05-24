@@ -98,18 +98,22 @@
                                 @endif
                             </td>
                             <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 space-y-2">
-                            <button type="button"
-                                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                    </svg>
-                                    Edit
-                                </button>
                                 @if ($item->id == 1)
                                 @else
-                                <form action="{{route('users.destroy', [$item->id])}}" method="POST">
+                                <form action="{{route('users.edit', [$item->id])}}" method="GET" class="inline-flex">
+                                    @csrf
+                                    <button type="submit"
+                                        class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                        Edit
+                                    </button>
+                                </form>
+                                <form action="{{route('users.destroy', [$item->id])}}" method="POST" class="inline-flex"
+                                    onsubmit="return confirm('Delete this data permanently?')">
                                     @method('DELETE')
                                     @csrf
                                     <button type="submit"

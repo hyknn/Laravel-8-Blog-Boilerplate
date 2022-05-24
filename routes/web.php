@@ -42,6 +42,7 @@ Route::middleware(['auth','verified'])->group(function () {
 
     // Users
     Route::resource('users', UserController::class);
+    Route::patch('users/{id}/update-password', [UserController::class,'updatePass'])->name('users.updatepass');
 });
 
 require __DIR__.'/auth.php';

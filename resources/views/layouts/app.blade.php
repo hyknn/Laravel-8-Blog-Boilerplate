@@ -33,7 +33,7 @@
                 x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
                 x-description="Off-canvas menu overlay, show/hide based on off-canvas menu state."
-                class="fixed inset-0 bg-gray-600 bg-opacity-75" @click="open = false" aria-hidden="true"
+                class="fixed inset-0 bg-primary-600 bg-opacity-75" @click="open = false" aria-hidden="true"
                 style="display: none;">
             </div>
 
@@ -42,7 +42,7 @@
                 x-transition:leave="transition ease-in-out duration-300 transform"
                 x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
                 x-description="Off-canvas menu, show/hide based on off-canvas menu state."
-                class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-700" style="display: none;">
+                class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-primary-700" style="display: none;">
 
                 <div x-show="open" x-transition:enter="ease-in-out duration-300" x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100" x-transition:leave="ease-in-out duration-300"
@@ -80,7 +80,7 @@
         <!-- Static sidebar for desktop -->
         <div class="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0">
             <!-- Sidebar component, swap this element with another sidebar if you like -->
-            <div class="flex flex-col flex-grow bg-gray-700 pt-5 pb-4 overflow-y-auto">
+            <div class="flex flex-col flex-grow bg-primary-700 pt-5 pb-4 overflow-y-auto">
                 <div class="flex items-center flex-shrink-0 px-4">
                     <a href="{{ URL::to('/') }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-white" />
@@ -93,9 +93,9 @@
         </div>
 
         <div class="lg:pl-64 flex flex-col flex-1">
-            <div class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:border-none">
+            <div class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-primary-200 lg:border-none">
                 <button type="button"
-                    class="px-4 border-r border-gray-200 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 lg:hidden"
+                    class="px-4 border-r border-primary-200 text-primary-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 lg:hidden"
                     @click="open = true">
                     <span class="sr-only">Open sidebar</span>
                     <svg class="h-6 w-6" x-description="Heroicon name: outline/menu-alt-1"
@@ -111,10 +111,10 @@
                     </div>
                     <div class="ml-4 flex items-center md:ml-6">
                         <button type="button"
-                            class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            class="bg-white p-1 rounded-full text-primary-400 hover:text-primary-500 focus:text-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                             <span class="sr-only">View notifications</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -127,10 +127,10 @@
                             @csrf
                             <button href="route('logout')"
                                 onclick="event.preventDefault(); this.closest('form').submit();"
-                                class="bg-white ml-3 p-1 rounded-full text-gray-400 hover:text-gray-500 focus:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                class="bg-white ml-3 p-1 rounded-full text-primary-400 hover:text-primary-500 focus:text-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                                 <span class="sr-only">Sign out</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                 </svg>
@@ -148,21 +148,21 @@
 
     @livewireScripts
 
-    {{-- <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    {{-- <div class="min-h-screen bg-primary-100">
+        @include('layouts.navigation')
 
-            <!-- Page Heading -->
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
+        <!-- Page Heading -->
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div> --}}
+        <!-- Page Content -->
+        <main>
+            {{ $slot }}
+        </main>
+    </div> --}}
 </body>
 
 </html>

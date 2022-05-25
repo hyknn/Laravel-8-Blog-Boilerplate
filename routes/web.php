@@ -37,9 +37,6 @@ Route::middleware(['auth','verified'])->group(function () {
     // Category
     Route::resource('categories', CategoryController::class);
 
-    // Tag
-    Route::resource('tags', TagController::class);
-
     // Users
     Route::resource('users', UserController::class);
     Route::patch('users/{id}/update-password', [UserController::class,'updatePass'])->name('users.updatepass');

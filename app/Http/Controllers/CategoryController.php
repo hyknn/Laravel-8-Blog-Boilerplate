@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
+use Session;
 
 class CategoryController extends Controller
 {
@@ -25,7 +29,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('category.create');
     }
 
     /**
@@ -36,14 +40,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:categories'],
+        ]);
+
         $category = new Category();
         $category->name = $request->name;
-        $category->slug = \Str::slug($request->name);
-        $category->keywords = $request->keywords;
+        $category->slug = Str::slug($request->name);
         $category->meta_desc = $request->meta_desc;
         $category->save();
 
-        return redirect()->back()->with('success','Data added successfully');
+        Session::flash('alert_type', 'success');
+        Session::flash('alert_message', 'Data Updated');
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -65,7 +74,13 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        if ($id != 1) {
+            $category = Category::findOrFail($id);
+            return view('category.edit', compact('category'));
+        }
+        else {
+            return redirect()->route('category.index');
+        }
     }
 
     /**
@@ -77,14 +92,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', Rule::unique('categories')->ignore($id)],
+        ]);
+
         $category = Category::findOrFail($id);
+
         $category->name = $request->name;
-        $category->slug = $request->slug;
-        $category->keywords = $request->keywords;
+        $category->slug = Str::slug($request->name);
         $category->meta_desc = $request->meta_desc;
         $category->save();
 
-        return redirect()->back()->with('success','Data updated successfully');
+        Session::flash('alert_type', 'success');
+        Session::flash('alert_message', 'Data Updated');
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -95,9 +116,16 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
+        if ($id != 1) {
+            $category = Category::findOrFail($id);
+            $category->delete();
 
-        return redirect()->back()->with('success', 'Data Deleted Successfully');
+            Session::flash('alert_message', 'Data Deleted');
+            Session::flash('alert_type', 'warning');
+            return redirect()->route('categories.index');
+        }
+        else {
+            return redirect()->route('categories.index');
+        }
     }
 }

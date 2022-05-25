@@ -105,6 +105,7 @@ class CategoryController extends Controller
 
         Session::flash('alert_type', 'success');
         Session::flash('alert_message', 'Data Updated');
+
         return redirect()->route('categories.index');
     }
 

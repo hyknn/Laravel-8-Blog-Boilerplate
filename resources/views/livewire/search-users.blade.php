@@ -43,6 +43,9 @@
 
     <div class="lg:mt-8">
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            @if(session('alert_message'))
+            <x-alert :message="session('alert_message')" title="Warning Title" :type="session('alert_type')"></x-alert>
+            @endif
             <div class="-mx-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-300">
                     <thead class="bg-gray-50">

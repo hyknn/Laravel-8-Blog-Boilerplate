@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Session;
 
 class UserController extends Controller
 {
@@ -51,7 +52,9 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('users.index')->with('success', 'Data Added Successfully');
+        Session::flash('alert_type', 'success');
+        Session::flash('alert_message', 'Data Updated');
+        return redirect()->route('users.index');
     }
 
     /**
@@ -103,7 +106,9 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->save();
 
-            return redirect()->route('users.index')->with('success', 'Data Added Successfully');
+            Session::flash('alert_type', 'success');
+            Session::flash('alert_message', 'Data Updated');
+            return redirect()->route('users.index');
         }
         else {
             return redirect()->route('users.index');
@@ -121,7 +126,9 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
 
-            return redirect()->route('users.index')->with('success', 'Data Added Successfully');
+            Session::flash('alert_type', 'success');
+            Session::flash('alert_message', 'Data Updated');
+            return redirect()->route('users.index');
         }
         else {
             return redirect()->route('users.index');
@@ -139,7 +146,10 @@ class UserController extends Controller
         if ($id != 1) {
             $user = User::findOrFail($id);
             $user->delete();
-            return redirect()->route('users.index')->with('success', 'Data Deleted Successfully');
+
+            Session::flash('alert_message', 'Data Deleted');
+            Session::flash('alert_type', 'warning');
+            return redirect()->route('users.index');
         }
         else {
             return redirect()->route('users.index');

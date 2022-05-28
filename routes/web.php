@@ -47,7 +47,14 @@ Route::middleware(['auth','verified'])->group(function () {
 
     // Generate Sitemap
     Route::get('/generate-sitemap', function () {
-        SitemapGenerator::create('http://localhost')->writeToFile(public_path('sitemap.xml'));
+        $sitemap = Sitemap::create();
+        $post = Post::all();
+
+        foreach ($post as $post) {
+            $sitemap->add(Url::create("/post/{$post->slug}"));
+        }
+
+        $sitemap->writeToFile(public_path('sitemap.xml'));
     });
 });
 

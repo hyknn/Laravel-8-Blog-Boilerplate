@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +19,9 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [FrontController::class, 'index'])->name('frontpage');
+Route::get('blog/{slug}', [FrontController::class, 'show'])->name('blog.show');
+Route::get('category/{category:slug}', [FrontController::class, 'category'])->name('category');
 
 Route::middleware(['auth','verified'])->group(function () {
 

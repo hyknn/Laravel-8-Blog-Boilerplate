@@ -107,20 +107,14 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            "title"     => "required|unique:posts,title,".$id,
-            "post_desc" => "required",
-            "category"  => "required",
-            "tags"      => "array|required",
-            "keywords"  => "required",
-            "meta_desc" => "required",
+        $request->validate([
+            'title'     => ['required','unique:posts'],
+            'cover'     => ['required','image','mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'desc'      => ['required'],
+            'category'  => ['required'],
+            'keywords'  => ['required'],
+            'meta_desc' => ['required'],
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-        }
 
         $post = Post::findOrFail($id);
 
@@ -132,22 +126,22 @@ class PostController extends Controller
             }
 
             $new_cover_path = $new_cover->store('images/blog', 'public');
-
             $post->cover = $new_cover_path;
         }
 
         $post->title        = $request->title;
-        $post->slug         = $request->slug;
+        $post->slug         = Str::slug($request->title);
         $post->user_id      = Auth::user()->id;
         $post->category_id  = $request->category;
-        $post->desc         = $request->post_desc;
+        $post->desc         = $request->desc;
         $post->keywords     = $request->keywords;
         $post->meta_desc    = $request->meta_desc;
         $post->save();
 
-        $post->tags()->sync($request->tags);
+        Session::flash('alert_type', 'success');
+        Session::flash('alert_message', 'Data Updated');
 
-        return redirect()->route('post.index')->with('success', 'Data updated successfully');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -188,14 +182,14 @@ class PostController extends Controller
             Session::flash('alert_message', 'Data Restored');
             Session::flash('alert_type', 'success');
 
-            return redirect()->back();
+            return redirect()->route('posts.trash');
 
         }else {
 
             Session::flash('alert_message', 'Data is not in trash');
             Session::flash('alert_type', 'warning');
 
-            return redirect()->back();
+            return redirect()->route('posts.trash');
         }
     }
 
@@ -209,7 +203,8 @@ class PostController extends Controller
             Session::flash('alert_message', 'Data is not in trash');
             Session::flash('alert_type', 'warning');
 
-            return redirect()->back();
+            return redirect()->route('posts.trash');
+
         }else {
             if($post->cover && file_exists(storage_path('app/public/' . $post->cover))){
                 \Storage::delete('public/'. $post->cover);
@@ -220,7 +215,7 @@ class PostController extends Controller
         Session::flash('alert_message', 'Data Deleted');
         Session::flash('alert_type', 'warning');
 
-        return redirect()->back();
+        return redirect()->route('posts.trash');
         }
     }
 }

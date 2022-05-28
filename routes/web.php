@@ -44,5 +44,8 @@ Route::middleware(['auth','verified'])->group(function () {
 
 require __DIR__.'/auth.php';
 
+// Storage Link
+Route::get('/storage-link', function () {Artisan::call('storage:link');});
+
 
 

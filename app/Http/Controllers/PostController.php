@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Category, Post, User};
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 use Session;
 
@@ -207,7 +208,7 @@ class PostController extends Controller
 
         }else {
             if($post->cover && file_exists(storage_path('app/public/' . $post->cover))){
-                \Storage::delete('public/'. $post->cover);
+                Storage::delete($post->cover);
             }
 
         $post->forceDelete();

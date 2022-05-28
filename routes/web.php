@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontController;
+use Spatie\Sitemap\SitemapGenerator;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,12 +41,20 @@ Route::middleware(['auth','verified'])->group(function () {
     // Users
     Route::resource('users', UserController::class);
     Route::patch('users/{id}/update-password', [UserController::class,'updatePass'])->name('users.updatepass');
+
+    // Storage Link
+    Route::get('/storage-link', function () {Artisan::call('storage:link');});
+
+    // Generate Sitemap
+    Route::get('/generate-sitemap', function () {
+        SitemapGenerator::create('http://localhost')->writeToFile(public_path('sitemap.xml'));
+    });
 });
 
 require __DIR__.'/auth.php';
 
-// Storage Link
-Route::get('/storage-link', function () {Artisan::call('storage:link');});
+
+
 
 
 

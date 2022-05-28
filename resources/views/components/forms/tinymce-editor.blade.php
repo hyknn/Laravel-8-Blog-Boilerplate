@@ -1,3 +1,1 @@
-<form method="post">
-    <textarea id="myeditorinstance"></textarea>
-</form>
+<textarea id="post_desc" name="desc"></textarea>

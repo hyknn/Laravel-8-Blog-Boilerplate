@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Category, Post, Tag};
+use App\Models\{Category, Post, User};
+use Illuminate\Support\Str;
+use Auth;
+use Session;
 
 class PostController extends Controller
 {
@@ -14,7 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::all()->sortBy('created_at');
         return view('post.index', ['posts' => $posts]);
     }
 
@@ -26,8 +29,7 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $tags       = Tag::all();
-        return view('post.create', compact('categories','tags'));
+        return view('post.create', compact('categories'));
     }
 
     /**
@@ -38,30 +40,26 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "title"     => "required|unique:posts,title",
-            "cover"     => "required",
-            "desc"      => "required",
-            "category"  => "required",
-            "tags"      => "array|required",
-            "keywords"  => "required",
-            "meta_desc" => "required",
+        $request->validate([
+            'title'     => ['required','unique:posts'],
+            'cover'     => ['required','image','mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'desc'      => ['required'],
+            'category'  => ['required'],
+            'keywords'  => ['required'],
+            'meta_desc' => ['required'],
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-        }
         $post               = new Post();
 
         $cover              = $request->file('cover');
+
         if($cover){
             $cover_path     = $cover->store('images/blog', 'public');
             $post->cover    = $cover_path;
         }
+
         $post->title        = $request->title;
-        $post->slug         = \Str::slug($request->title);
+        $post->slug         = Str::slug($request->title);
         $post->user_id      = Auth::user()->id;
         $post->category_id  = $request->category;
         $post->desc         = $request->desc;
@@ -69,9 +67,11 @@ class PostController extends Controller
         $post->meta_desc    = $request->meta_desc;
         $post->save();
 
-        $post->tags()->attach($request->tags);
 
-        return redirect()->route('post.index')->with('success', 'Data added successfully');
+        Session::flash('alert_type', 'success');
+        Session::flash('alert_message', 'Data Updated');
+
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -95,8 +95,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         $categories = Category::all();
-        $tags = Tag::all();
-        return view('post.edit',compact('post','categories','tags'));
+        return view('post.edit',compact('post','categories'));
     }
 
     /**
@@ -110,7 +109,7 @@ class PostController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "title"     => "required|unique:posts,title,".$id,
-            "desc"      => "required",
+            "post_desc" => "required",
             "category"  => "required",
             "tags"      => "array|required",
             "keywords"  => "required",
@@ -141,7 +140,7 @@ class PostController extends Controller
         $post->slug         = $request->slug;
         $post->user_id      = Auth::user()->id;
         $post->category_id  = $request->category;
-        $post->desc         = $request->desc;
+        $post->desc         = $request->post_desc;
         $post->keywords     = $request->keywords;
         $post->meta_desc    = $request->meta_desc;
         $post->save();
@@ -161,7 +160,11 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         $post->delete();
-        return redirect()->route('post.index')->with('success','Data moved to trash');
+
+        Session::flash('alert_message', 'Data Deleted');
+        Session::flash('alert_type', 'warning');
+
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -177,11 +180,22 @@ class PostController extends Controller
      */
     public function restore($id) {
         $post = Post::withTrashed()->findOrFail($id);
+
         if ($post->trashed()) {
+
             $post->restore();
-            return redirect()->back()->with('success','Data successfully restored');
+
+            Session::flash('alert_message', 'Data Restored');
+            Session::flash('alert_type', 'success');
+
+            return redirect()->back();
+
         }else {
-            return redirect()->back()->with('error','Data is not in trash');
+
+            Session::flash('alert_message', 'Data is not in trash');
+            Session::flash('alert_type', 'warning');
+
+            return redirect()->back();
         }
     }
 
@@ -191,14 +205,22 @@ class PostController extends Controller
     public function deletePermanent($id){
         $post = Post::withTrashed()->findOrFail($id);
         if (!$post->trashed()) {
-            return redirect()->back()->with('error','Data is not in trash');
+
+            Session::flash('alert_message', 'Data is not in trash');
+            Session::flash('alert_type', 'warning');
+
+            return redirect()->back();
         }else {
-            $post->tags()->detach();
             if($post->cover && file_exists(storage_path('app/public/' . $post->cover))){
                 \Storage::delete('public/'. $post->cover);
             }
+
         $post->forceDelete();
-        return redirect()->back()->with('success', 'Data deleted successfully');
+
+        Session::flash('alert_message', 'Data Deleted');
+        Session::flash('alert_type', 'warning');
+
+        return redirect()->back();
         }
     }
 }

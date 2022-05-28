@@ -5,12 +5,12 @@ use Illuminate\Support\Str;
 
 use Livewire\Component;
 
-class Permalink extends Component
+class PostPermalink extends Component
 {
     public $permalink;
 
     public function render()
     {
-        return view('livewire.permalink');
+        return view('livewire.post-permalink');
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontController;
 use Spatie\Sitemap\SitemapGenerator;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,15 +48,9 @@ Route::middleware(['auth','verified'])->group(function () {
 
     // Generate Sitemap
     Route::get('/generate-sitemap', function () {
-        $sitemap = Sitemap::create();
-        $post = Post::all();
-
-        foreach ($post as $post) {
-            $sitemap->add(Url::create("/post/{$post->slug}"));
-        }
-
-        $sitemap->writeToFile(public_path('sitemap.xml'));
-    });
+        $path = public_path('sitemap.xml');
+        SitemapGenerator::create(url()->full())->writeToFile($path);
+    })->name('generate-sitemap');
 });
 
 require __DIR__.'/auth.php';

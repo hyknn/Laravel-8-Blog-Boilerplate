@@ -53,6 +53,7 @@
 
         <div class="mt-8">
             <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                @if (!File::exists(public_path('sitemap.xml')))
                 <div class="mb-3 bg-yellow-50 border-l-4 border-yellow-400 p-4">
                     <div class="flex">
                         <div class="flex-shrink-0">
@@ -67,14 +68,15 @@
                         <div class="ml-3">
                             <p class="text-sm text-yellow-700">
                                 Sitemap haven't generated.
-                                <a href="#" class="font-medium underline text-yellow-700 hover:text-yellow-600">
+                                <a href="{{route('generate-sitemap')}}"
+                                    class="font-medium underline text-yellow-700 hover:text-yellow-600">
                                     Generate your sitemap.
                                 </a>
                             </p>
                         </div>
                     </div>
                 </div>
-
+                @endif
                 <div class="mb-3 bg-yellow-50 border-l-4 border-yellow-400 p-4">
                     <div class="flex">
                         <div class="flex-shrink-0">

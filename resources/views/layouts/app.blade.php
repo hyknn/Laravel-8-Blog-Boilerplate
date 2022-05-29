@@ -15,11 +15,13 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/components-v2.js') }}" defer></script>
-    <x-head.tinymce-config />
     @livewireStyles
+
+    <!-- Scripts -->
+    <script defer src="{{ asset('js/app.js') }}"></script>
+    <script defer src="{{ asset('js/components-v2.js') }}"></script>
+
+    <x-head.tinymce-config />
 </head>
 
 <body class="font-sans antialiased h-full">
